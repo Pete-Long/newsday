@@ -12,6 +12,7 @@
 #   Build and Reload Package:  'Ctrl + Shift + B'
 #   Check Package:             'Ctrl + Shift + E'
 #   Test Package:              'Ctrl + Shift + T'
+install.packages('lubridate')
 library(lubridate)
 translate <- function(data,code,output){
   data[substr(data,1,nchar(code)) %in% code]=output
@@ -79,8 +80,8 @@ get_historical_status <- function(stsp_history, SUB_RRN, date){
   if (temp_history$STSP_TYPE_CD[1]=="S") return ('Active')
 }
 
-copy <- function(datatable){
-  write.table(datatable,"clipboard",sep="\t",row.names = F)
+copy <- function(datatable,row.names=F){
+  write.table(datatable,"clipboard",sep="\t",row.names=row.names)
 }
 
 date_to_ymd <- function(date){
@@ -101,3 +102,15 @@ get_historical_status <- function(stsp_history, SUB_RRN, date){
   if (temp_history$STSP_TYPE_CD[1]=="P") return (0)
   if (temp_history$STSP_TYPE_CD[1] %in% c("S","R")) return (1)
 }
+
+# ipak function: install and load multiple R packages.
+# check to see if packages are installed. Install them if they are not, then load them into the R session.
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+
